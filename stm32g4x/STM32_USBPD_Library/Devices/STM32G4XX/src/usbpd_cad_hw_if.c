@@ -1432,6 +1432,7 @@ static uint32_t ManageStateDetached_SRC(uint8_t PortNum)
 #endif /* _SRC || _DRP */
 
 #if defined(_DRP)
+extern volatile bool g_USBPD_DRP_attach_sensing;
 /**
   * @brief  Manage the detached state for dual role
   * @param  PortNum Port
@@ -1470,10 +1471,18 @@ static uint32_t ManageStateDetached_DRP(uint8_t PortNum)
         if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SNKToggleTime)
         {
           _handle->CAD_tToggle_start = HAL_GetTick();
-          Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
-          Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
-          _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
-          USBPDM1_AssertRd(PortNum);
+          if(g_USBPD_DRP_attach_sensing) {
+              Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
+              Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
+              _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
+              USBPDM1_AssertRp(PortNum);
+          }
+          else {
+              Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
+              Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
+              _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
+              USBPDM1_AssertRd(PortNum);
+          }
         }
         break;
       default:
