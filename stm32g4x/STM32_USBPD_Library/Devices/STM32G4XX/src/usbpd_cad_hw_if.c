@@ -168,6 +168,7 @@ static CAD_HW_HandleTypeDef CAD_HW_Handles[USBPD_PORT_COUNT];
   * @{
   */
 #if defined(_DRP) || defined(_SRC)
+extern volatile bool g_USBPD_DRP_attach_sensing;
 static void CAD_Check_HW_SRC(uint8_t PortNum);
 #endif /* _DRP || _SRC */
 
@@ -862,10 +863,18 @@ uint32_t CAD_StateMachine_DRP(uint8_t PortNum, USBPD_CAD_EVENT *pEvent, CCxPin_T
       LL_UCPD_RxDisable(Ports[PortNum].husbpd);
       if (USBPD_CAD_STATE_SWITCH_TO_SRC == _handle->cstate)
       {
-        USBPDM1_AssertRp(PortNum);
-        Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
-        Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
-        _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
+          if(g_USBPD_DRP_attach_sensing) {
+              USBPDM1_AssertRp(PortNum);
+              Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
+              Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
+              _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
+          }
+          else {
+              USBPDM1_AssertRd(PortNum);
+              Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
+              Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
+              _timing = Ports[PortNum].settings->CAD_SNKToggleTime;
+          }
       }
       if (USBPD_CAD_STATE_SWITCH_TO_SNK == _handle->cstate)
       {
@@ -1432,7 +1441,6 @@ static uint32_t ManageStateDetached_SRC(uint8_t PortNum)
 #endif /* _SRC || _DRP */
 
 #if defined(_DRP)
-extern volatile bool g_USBPD_DRP_attach_sensing;
 /**
   * @brief  Manage the detached state for dual role
   * @param  PortNum Port
