@@ -1391,6 +1391,12 @@ typedef uint32_t CAD_SNK_Source_Current_Adv_Typedef;
 
 typedef uint32_t CAD_RP_Source_Current_Adv_Typedef;
 
+#define Adv_Rd   0x00u
+#define Adv_Rp   0x01u
+#define Adv_RHiZ 0x02u
+
+typedef uint32_t CAD_TypeC_Adv_Typedef;
+
 /**
   * @brief USB PD SOP Message Types Structure definition
   */
