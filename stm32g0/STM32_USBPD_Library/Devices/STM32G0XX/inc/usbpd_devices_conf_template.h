@@ -50,11 +50,11 @@ extern "C" {
       usbpd_hw.c
 -------------------------------------------------------------------------------*/
 
-/* defined used to configure function : USBPD_HW_GetUSPDInstance */
+/* Define used to configure function : USBPD_HW_GetUSPDInstance */
 #define UCPD_INSTANCE0 UCPD1
 #define UCPD_INSTANCE1 UCPD2
 
-/* defined used to configure function : USBPD_HW_Init_DMARxInstance,USBPD_HW_DeInit_DMARxInstance */
+/* Define used to configure function : USBPD_HW_Init_DMARxInstance,USBPD_HW_DeInit_DMARxInstance */
 #define UCPDDMA_INSTANCE0_CLOCKENABLE_RX  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1)
 #define UCPDDMA_INSTANCE1_CLOCKENABLE_RX  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1)
 
@@ -70,7 +70,7 @@ extern "C" {
 #define UCPDDMA_INSTANCE0_CHANNEL_RX   DMA1_Channel5
 #define UCPDDMA_INSTANCE1_CHANNEL_RX   DMA1_Channel2
 
-/* defined used to configure function : USBPD_HW_Init_DMATxInstance, USBPD_HW_DeInit_DMATxInstance */
+/* Define used to configure function : USBPD_HW_Init_DMATxInstance, USBPD_HW_DeInit_DMATxInstance */
 #define UCPDDMA_INSTANCE0_CLOCKENABLE_TX  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1)
 #define UCPDDMA_INSTANCE1_CLOCKENABLE_TX  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1)
 
@@ -90,9 +90,9 @@ extern "C" {
 #define UCPDFRS_INSTANCE0_FRSCC1                                                      \
   do                                                                                  \
   {                                                                                   \
-    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);                                                       \
-    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_2, LL_GPIO_MODE_ALTERNATE);          \
-    LL_GPIO_SetAFPin_0_7(GPIOA, LL_GPIO_PIN_2, LL_GPIO_AF_4);   \
+    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOA);                              \
+    LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_2, LL_GPIO_MODE_ALTERNATE);                \
+    LL_GPIO_SetAFPin_0_7(GPIOA, LL_GPIO_PIN_2, LL_GPIO_AF_4);                       \
   } while(0)
 
 #define UCPDFRS_INSTANCE1_FRSCC1
@@ -100,9 +100,9 @@ extern "C" {
 #define UCPDFRS_INSTANCE0_FRSCC2                                                      \
   do                                                                                  \
   {                                                                                   \
-    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);                                                       \
-    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_0, LL_GPIO_MODE_ALTERNATE);          \
-    LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_0, LL_GPIO_AF_6);   \
+    LL_IOP_GRP1_EnableClock(LL_IOP_GRP1_PERIPH_GPIOB);                              \
+    LL_GPIO_SetPinMode(GPIOB, LL_GPIO_PIN_0, LL_GPIO_MODE_ALTERNATE);                \
+    LL_GPIO_SetAFPin_0_7(GPIOB, LL_GPIO_PIN_0, LL_GPIO_AF_6);                       \
   } while(0)
 
 #define UCPDFRS_INSTANCE1_FRSCC2

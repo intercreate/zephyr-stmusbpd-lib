@@ -54,9 +54,9 @@ uint16_t HW_IF_PWR_GetVoltage(uint8_t PortNum)
 
 int16_t HW_IF_PWR_GetCurrent(uint8_t PortNum)
 {
-  int32_t _current_I;
-  BSP_USBPD_PWR_VBUSGetCurrent(PortNum, &_current_I);
-  return (int16_t)_current_I;
+  int32_t _current;
+  BSP_USBPD_PWR_VBUSGetCurrent(PortNum, &_current);
+  return (int16_t)_current;
 }
 
 #if defined(_SRC) || defined(_DRP)

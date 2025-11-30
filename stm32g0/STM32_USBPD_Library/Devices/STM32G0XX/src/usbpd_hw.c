@@ -35,6 +35,7 @@ UCPD_TypeDef *USBPD_HW_GetUSPDInstance(uint8_t PortNum)
 #endif /* UCPD_INSTANCE0 && UCPD_INSTANCE1 */
 }
 
+#if !defined(USBPDCORE_LIB_NO_PD)
 DMA_Channel_TypeDef *USBPD_HW_Init_DMARxInstance(uint8_t PortNum)
 {
   LL_DMA_InitTypeDef DMA_InitStruct;
@@ -140,6 +141,7 @@ void USBPD_HW_DeInit_DMATxInstance(uint8_t PortNum)
 {
   (void)PortNum;
 }
+#endif /* !USBPDCORE_LIB_NO_PD */
 
 uint32_t USBPD_HW_GetRpResistorValue(uint8_t PortNum)
 {
@@ -153,7 +155,7 @@ void USBPD_HW_SetFRSSignalling(uint8_t PortNum, uint8_t cc)
   {
     case 0 :
     {
-      /* Configure the GPIO with the AF corresponding to UCPD */
+      /* Configure FRSTX GPIO */
       if (1u == cc)
       {
         /* FRS_TX1 PA2 (CC1) */
@@ -169,13 +171,15 @@ void USBPD_HW_SetFRSSignalling(uint8_t PortNum, uint8_t cc)
 #if defined(UCPD_INSTANCE1)
     case 1 :
     {
-      /* the FRS is not available for the second port */
+      /* Configure FRSTX GPIO */
       if (1u == cc)
       {
+        /* FRS_TX1 PA2 (CC1) */
         UCPDFRS_INSTANCE1_FRSCC1;
       }
       else
       {
+        /* FRS_TX2 PB0 (CC2) */
         UCPDFRS_INSTANCE1_FRSCC2;
       }
       break;
