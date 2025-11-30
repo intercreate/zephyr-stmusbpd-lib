@@ -69,15 +69,20 @@ extern "C" {
   */
 #define USBPD_IS_VALID_VOLTAGE(__MV__, __MAXMV__, __MINMV__) ((((__MV__) <= (__MAXMV__))\
                                                                && ((__MV__) >= (__MINMV__)))? 1U: 0U)
-
+#if NOT_ZEPHYR
 #define DIV_ROUND_UP(x, y) (((x) + ((y) - 1u)) / (y))
+#endif
 #define MV2ADC(__X__)           ( (__X__*4095) / 3300 )
 #define ADC2MV(__X__)           ( (__X__*3300) / 4095 )
 
 /* Macros for integer division with various rounding variants default integer
    division rounds down. */
+#ifndef MIN
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef MAX
 #define MAX(a, b)  (((a) > (b)) ? (a) : (b))
+#endif
 
 #define USPBPD_WRITE32 USBPD_WRITE32 /* For legacy purpose */
 

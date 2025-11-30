@@ -47,16 +47,16 @@ USBPD_StatusTypeDef HW_IF_PWR_SetVoltage(uint8_t PortNum, uint16_t voltage)
 
 uint16_t HW_IF_PWR_GetVoltage(uint8_t PortNum)
 {
-  uint32_t _voltage;
-  BSP_USBPD_PWR_VBUSGetVoltage(PortNum, &_voltage);
-  return (uint16_t)_voltage;
+  uint32_t _voltage_V;
+  BSP_USBPD_PWR_VBUSGetVoltage(PortNum, &_voltage_V);
+  return (uint16_t)_voltage_V;
 }
 
 int16_t HW_IF_PWR_GetCurrent(uint8_t PortNum)
 {
-  int32_t _current;
-  BSP_USBPD_PWR_VBUSGetCurrent(PortNum, &_current);
-  return (int16_t)_current;
+  int32_t _current_I;
+  BSP_USBPD_PWR_VBUSGetCurrent(PortNum, &_current_I);
+  return (int16_t)_current_I;
 }
 
 #if defined(_SRC) || defined(_DRP)

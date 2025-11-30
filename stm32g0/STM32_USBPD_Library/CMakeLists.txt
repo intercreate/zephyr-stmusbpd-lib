@@ -41,3 +41,6 @@ foreach(stm_soc ${stm_socs})
         add_subdirectory(Devices/${SOC_TO_UPPER}X/src)
     endif()
 endforeach()
+
+# STM USB PD libraries for G0 has iar symbols. Add this to hide the warning
+zephyr_link_libraries(-Wl,--orphan-handling=place)

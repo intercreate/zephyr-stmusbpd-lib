@@ -301,6 +301,7 @@ void CAD_Init(uint8_t PortNum, USBPD_SettingsTypeDef *pSettings, USBPD_ParamsTyp
 #if defined(_SNK) || defined(_DRP)
   {
     USBPDM1_AssertRd(PortNum);
+    LL_SYSCFG_DisableDBATT(LL_SYSCFG_UCPD1_STROBE | LL_SYSCFG_UCPD2_STROBE);
 #if defined(TCPP0203_SUPPORT)
     /* Switch to Low Power mode */
     BSP_USBPD_PWR_SetPowerMode(PortNum, USBPD_PWR_MODE_LOWPOWER);
@@ -1525,19 +1526,21 @@ static uint32_t ManageStateAttachedWait_SRC(uint8_t PortNum, USBPD_CAD_EVENT *pE
 
   if ((_handle->CurrentHWcondition != HW_Detachment) && (_handle->CurrentHWcondition != HW_PwrCable_NoSink_Attachment))
   {
-    if (USBPD_FALSE == USBPD_PWR_IF_GetVBUSStatus(PortNum, USBPD_PWR_BELOWVSAFE0V))
+    if (_handle->CAD_tDebounce_flag == USBPD_FALSE)
     {
       /* Reset the timing because VBUS threshold not yet reach */
       _handle->CAD_tDebounce_start = HAL_GetTick();
+      _handle->CAD_tDebounce_flag = USBPD_TRUE;
       return CAD_TCCDEBOUNCE_THRESHOLD;
     }
 
     /* Check tCCDebounce */
-    if (CAD_tDebounce > CAD_TCCDEBOUNCE_THRESHOLD)
+    if (CAD_tDebounce >= CAD_TCCDEBOUNCE_THRESHOLD)
     {
       switch (_handle->CurrentHWcondition)
       {
         case HW_Attachment:
+          BSP_USBPD_PWR_VBUSOn(PortNum);
           HW_SignalAttachement(PortNum, _handle->cc);
           _handle->cstate = USBPD_CAD_STATE_ATTACHED;
           *pEvent = USBPD_CAD_EVENT_ATTACHED;
@@ -1576,11 +1579,10 @@ static uint32_t ManageStateAttachedWait_SRC(uint8_t PortNum, USBPD_CAD_EVENT *pE
 #endif /* _ACCESSORY_SRC */
           break;
       } /* End of switch */
+      _handle->CAD_tDebounce_flag = USBPD_FALSE;
       *pCCXX = _handle->cc;
       _timing = CAD_DEFAULT_TIME;
     }
-    /* Reset the flag for CAD_tDebounce */
-    _handle->CAD_tDebounce_flag = USBPD_FALSE;
   }
   else /* CAD_HW_Condition[PortNum] = HW_Detachment */
   {

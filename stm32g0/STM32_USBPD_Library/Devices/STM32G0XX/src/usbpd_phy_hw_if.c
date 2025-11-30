@@ -421,6 +421,7 @@ void HW_SignalDetachment(uint8_t PortNum)
     (void)BSP_USBPD_PWR_VCONNDeInit(PortNum, (Ports[PortNum].CCx == CC1) ? 1u : 2u);
 #endif /* _VCONN_SUPPORT */
     /* DeInitialise VBUS power */
+    BSP_USBPD_PWR_VBUSOff(PortNum);
     (void)BSP_USBPD_PWR_VBUSDeInit(PortNum);
   }
 

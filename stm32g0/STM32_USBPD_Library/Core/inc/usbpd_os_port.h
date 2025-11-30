@@ -143,8 +143,8 @@ extern "C" {
 #define OS_CREATE_QUEUE(_ID_,_NAME_,_ELT_,_ELTSIZE_)     \
   do                                                     \
   {                                                      \
-    osMessageQDef(queuetmp, (_ELT_), (_ELTSIZE_));       \
-    (_ID_) = osMessageCreate(osMessageQ(queuetmp), NULL);\
+    osMessageQDef(_NAME_, (_ELT_), (_ELTSIZE_));       \
+    (_ID_) = osMessageCreate(osMessageQ(_NAME_), NULL);\                                                    \
     if((_ID_) == 0)                                      \
     {                                                    \
       _retr = USBPD_ERROR;                               \
@@ -284,8 +284,8 @@ extern "C" {
 #define OS_CREATE_TASK(_ID_,_NAME_,_FUNC_,_PRIORITY_,_STACK_SIZE_, _PARAM_) \
   do                                                                        \
   {                                                                         \
-    osThreadDef(_NAME_, _FUNC_, _PRIORITY_, 0, _STACK_SIZE_);               \
-    (_ID_) = osThreadCreate(osThread(_NAME_), (void *)(_PARAM_));           \
+    osThreadDef(_FUNC_, _PRIORITY_, 1, _STACK_SIZE_);                       \
+    (_ID_) = osThreadCreate(osThread(_FUNC_), (void *)(_PARAM_));           \
     if (NULL == (_ID_))                                                     \
     {                                                                       \
       _retr = USBPD_ERROR;                                                  \
@@ -319,7 +319,7 @@ extern "C" {
 #define OS_TASK_IS_SUSPENDED(_ID_) (TX_SUSPENDED == (_ID_).tx_thread_state)
 #else
 #if (osCMSIS < 0x20000U)
-#define OS_TASK_IS_SUSPENDED(_ID_) (osThreadSuspended == osThreadGetState((_ID_)))
+#define OS_TASK_IS_SUSPENDED(_ID_) (((k_tid_t)_ID_)->base.thread_state & _THREAD_SUSPENDED)
 #else
 #define OS_TASK_IS_SUSPENDED(_ID_) (osThreadBlocked == osThreadGetState((_ID_)))
 #endif /* osCMSIS < 0x20000U */
@@ -342,8 +342,12 @@ extern "C" {
 #if defined(USBPD_THREADX)
 #define OS_TASK_SUSPEND(_ID_)    tx_thread_suspend(_ID_)
 #else
+#if (osCMSIS < 0x20000U)
+#define OS_TASK_SUSPEND(_ID_)    k_thread_suspend((k_tid_t)_ID_)
+#else
 #define OS_TASK_SUSPEND(_ID_)    osThreadSuspend(_ID_)
 #endif /* USBPD_THREADX */
+#endif
 
 /**
   * @brief macro definition used to kill a task
@@ -363,8 +367,12 @@ extern "C" {
 #define OS_TASK_RESUME(_ID_)     tx_thread_resume(&_ID_)
 #else
 
+#if (osCMSIS < 0x20000U)
+#define OS_TASK_RESUME(_ID_)     k_thread_resume((k_tid_t)_ID_)
+#else
 #define OS_TASK_RESUME(_ID_)     osThreadResume(_ID_)
 #endif /* USBPD_THREADX */
+#endif
 
 /**
   * @brief macro definition used to manage the delay
