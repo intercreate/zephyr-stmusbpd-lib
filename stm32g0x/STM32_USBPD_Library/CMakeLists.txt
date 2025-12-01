@@ -21,9 +21,8 @@ zephyr_compile_definitions_ifdef(CONFIG_STM32_XCUBEUSBPD_HAS_SRC_SUPPORT _SRC)
 zephyr_compile_definitions_ifdef(CONFIG_STM32_XCUBEUSBPD_HAS_DRP_SUPPORT _DRP)
 zephyr_compile_definitions_ifdef(CONFIG_STM32_XCUBEUSBPD_HAS_VDM_SUPPORT _VDM)
 
-zephyr_library_include_directories(
-    Core/inc
-    )
+zephyr_library_include_directories(Core/inc)
+zephyr_include_directories(Core/inc)
 
 zephyr_library_sources(
     Core/src/usbpd_dpm_core.c

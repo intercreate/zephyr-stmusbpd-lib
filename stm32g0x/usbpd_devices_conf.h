@@ -24,8 +24,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbpd_dpm_user.h"
-#include "usbpd_pwr_user.h"
-#include "usbpd_pwr_if.h"
 #include "stm32g0xx_ll_adc.h"
 #include "stm32g0xx_ll_bus.h"
 #if defined(USBPD_HW_C)||defined(USBPD_BSP_TRACE_C)

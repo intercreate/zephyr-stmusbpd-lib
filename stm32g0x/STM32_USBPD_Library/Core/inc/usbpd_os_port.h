@@ -27,7 +27,7 @@ extern "C" {
 #include "tx_api.h"
 #else
 #if defined(_RTOS)
-#include "cmsis_os.h"
+#include <zephyr/portability/cmsis_os.h>
 #if (osCMSIS >= 0x20000U)
 #include "FreeRTOS.h"
 #include "task.h"
@@ -143,8 +143,8 @@ extern "C" {
 #define OS_CREATE_QUEUE(_ID_,_NAME_,_ELT_,_ELTSIZE_)     \
   do                                                     \
   {                                                      \
-    osMessageQDef(_NAME_, (_ELT_), (_ELTSIZE_));       \
-    (_ID_) = osMessageCreate(osMessageQ(_NAME_), NULL);\                                                    \
+    osMessageQDef(_NAME_, (_ELT_), (_ELTSIZE_));         \
+    (_ID_) = osMessageCreate(osMessageQ(_NAME_), NULL);  \
     if((_ID_) == 0)                                      \
     {                                                    \
       _retr = USBPD_ERROR;                               \
