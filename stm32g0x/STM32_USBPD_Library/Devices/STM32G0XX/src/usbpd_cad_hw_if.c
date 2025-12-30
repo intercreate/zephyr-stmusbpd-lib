@@ -863,9 +863,9 @@ uint32_t CAD_StateMachine_DRP(uint8_t PortNum, USBPD_CAD_EVENT *pEvent, CCxPin_T
       LL_UCPD_RxDisable(Ports[PortNum].husbpd);
       if (USBPD_CAD_STATE_SWITCH_TO_SRC == _handle->cstate)
       {
-        USBPDM1_AssertRp(PortNum);
-        Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
-        Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
+        USBPDM1_AssertRd(PortNum);
+        Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
+        Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
         _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
       }
       if (USBPD_CAD_STATE_SWITCH_TO_SNK == _handle->cstate)
@@ -1492,10 +1492,10 @@ static uint32_t ManageStateDetached_DRP(uint8_t PortNum)
         if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SNKToggleTime)
         {
           _handle->CAD_tToggle_start = HAL_GetTick();
-          Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
-          Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
+          Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
+          Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
           _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
-          USBPDM1_AssertRp(PortNum);
+          USBPDM1_AssertRd(PortNum);
         }
         break;
       default:
