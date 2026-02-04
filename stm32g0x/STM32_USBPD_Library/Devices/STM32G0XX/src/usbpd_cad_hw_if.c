@@ -263,7 +263,8 @@ void CAD_Init(uint8_t PortNum, USBPD_SettingsTypeDef *pSettings, USBPD_ParamsTyp
   /* Controls whether pull-ups and pull-downs controls related to ANAMODE and ANASUBMODE
      should be applied to CC1 and CC2 analog PHYs */
   /* Should be done when UCPDEN is 1 */
-  LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
+  LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
+          Ports[PortNum].params->IsPhyEnabled ? LL_UCPD_CCENABLE_CC1CC2 : LL_UCPD_CCENABLE_NONE);
 
 #ifdef _LOW_POWER
   LL_UCPD_WakeUpEnable(Ports[PortNum].husbpd);
@@ -1476,6 +1477,8 @@ static uint32_t ManageStateDetached_DRP(uint8_t PortNum)
   /* Manage the toggle */
   if (_handle->CurrentHWcondition == HW_Detachment)
   {
+    if (Ports[PortNum].settings->CAD_SRCToggleTime != 0 && Ports[PortNum].settings->CAD_SNKToggleTime != 0)
+    {
     switch (Ports[PortNum].params->PE_PowerRole)
     {
       case USBPD_PORTPOWERROLE_SRC :
@@ -1500,6 +1503,7 @@ static uint32_t ManageStateDetached_DRP(uint8_t PortNum)
         break;
       default:
         break;
+    }
     }
   }
 
@@ -1636,7 +1640,7 @@ static uint32_t ManageStateEMC(uint8_t PortNum, USBPD_CAD_EVENT *pEvent, CCxPin_
 #if defined(_DRP)
       if (USBPD_TRUE == Ports[PortNum].settings->CAD_RoleToggle)
       {
-        if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SRCToggleTime)
+        if (Ports[PortNum].settings->CAD_SRCToggleTime && (HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SRCToggleTime)
         {
           _handle->cstate = USBPD_CAD_STATE_SWITCH_TO_SNK;
         }
@@ -1671,7 +1675,9 @@ static uint32_t ManageStateAttached_DRP(uint8_t PortNum, USBPD_CAD_EVENT *pEvent
   /* Toggle management */
   if (_handle->CurrentHWcondition == HW_Detachment)
   {
-    _handle->cstate = USBPD_CAD_STATE_SWITCH_TO_SRC;
+    _handle->cstate = Ports[PortNum].settings->PE_DefaultRole == USBPD_PORTPOWERROLE_SNK ?
+        USBPD_CAD_STATE_SWITCH_TO_SNK : Ports[PortNum].settings->PE_DefaultRole == USBPD_PORTPOWERROLE_SRC ?
+        USBPD_CAD_STATE_SWITCH_TO_SRC : USBPD_CAD_STATE_RESET;
     _timing = 0;
   }
   return _timing;
@@ -1740,7 +1746,7 @@ static uint32_t ManageStateAttached_SRC(uint8_t PortNum, USBPD_CAD_EVENT *pEvent
       {
         HW_SignalDetachment(PortNum);
 #ifdef _DRP
-        if (USBPD_TRUE == Ports[PortNum].settings->CAD_RoleToggle)
+        if (Ports[PortNum].settings->CAD_SRCToggleTime && USBPD_TRUE == Ports[PortNum].settings->CAD_RoleToggle)
         {
           USBPDM1_AssertRd(PortNum);
         }

@@ -358,6 +358,7 @@ USBPD_StatusTypeDef USBPD_DPM_InitCore(void)
     DPM_Params[_port_index].ActiveCCIs       = CCNONE;
     DPM_Params[_port_index].VconnCCIs        = CCNONE;
     DPM_Params[_port_index].VconnStatus      = USBPD_FALSE;
+    DPM_Params[_port_index].IsPhyEnabled     = DPM_Settings[_port_index].CAD_DefaultPhyEnableState;
 
 #if defined(USBPD_TCPM_MODULE_ENABLED)
     {

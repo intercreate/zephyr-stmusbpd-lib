@@ -171,6 +171,7 @@ void USBPDM1_AssertRp(uint8_t PortNum)
   }
   LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_NONE);
   LL_UCPD_SetSRCRole(Ports[PortNum].husbpd);
+  if(Ports[PortNum].params->IsPhyEnabled) {
   if (CCNONE == Ports[PortNum].CCx)
   {
     LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
@@ -179,6 +180,7 @@ void USBPDM1_AssertRp(uint8_t PortNum)
   {
     LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
                         (Ports[PortNum].CCx == CC1) ? LL_UCPD_CCENABLE_CC1 : LL_UCPD_CCENABLE_CC2);
+  }
   }
   SET_BIT(SYSCFG->CFGR1, (Ports[PortNum].husbpd == UCPD1) ? SYSCFG_CFGR1_UCPD1_STROBE : SYSCFG_CFGR1_UCPD2_STROBE);
 
@@ -210,6 +212,7 @@ void USBPDM1_AssertRd(uint8_t PortNum)
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_NONE);
   LL_UCPD_SetSNKRole(Ports[PortNum].husbpd);
+  if(Ports[PortNum].params->IsPhyEnabled) {
   if (CCNONE == Ports[PortNum].CCx)
   {
     LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
@@ -218,6 +221,7 @@ void USBPDM1_AssertRd(uint8_t PortNum)
   {
     LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
                         (Ports[PortNum].CCx == CC1) ? LL_UCPD_CCENABLE_CC1 : LL_UCPD_CCENABLE_CC2);
+  }
   }
 
   SET_BIT(SYSCFG->CFGR1, (Ports[PortNum].husbpd == UCPD1) ? SYSCFG_CFGR1_UCPD1_STROBE : SYSCFG_CFGR1_UCPD2_STROBE);
@@ -373,11 +377,11 @@ void HW_SignalAttachement(uint8_t PortNum, CCxPin_TypeDef cc)
   /* Disable the Resistor on Vconn PIN */
   if (Ports[PortNum].CCx == CC1)
   {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1);
+    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, Ports[PortNum].params->IsPhyEnabled ? LL_UCPD_CCENABLE_CC1 : LL_UCPD_CCENABLE_NONE);
   }
   else
   {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC2);
+    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, Ports[PortNum].params->IsPhyEnabled ? LL_UCPD_CCENABLE_CC2 : LL_UCPD_CCENABLE_NONE);
   }
 
   /* Prepare the rx processing */
@@ -412,7 +416,7 @@ void HW_SignalDetachment(uint8_t PortNum)
   USBPD_HW_DeInit_DMATxInstance(PortNum);
   USBPD_HW_DeInit_DMARxInstance(PortNum);
 
-  LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
+  LL_UCPD_SetccEnable(Ports[PortNum].husbpd, Ports[PortNum].params->IsPhyEnabled ? LL_UCPD_CCENABLE_CC1CC2 : LL_UCPD_CCENABLE_NONE);
 
   if (USBPD_PORTPOWERROLE_SNK == Ports[PortNum].params->PE_PowerRole)
   {

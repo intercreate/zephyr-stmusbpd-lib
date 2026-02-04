@@ -3509,7 +3509,7 @@ typedef struct
   uint32_t PE_CapscounterSupport            : 1u; /*!< If enabled after an amount of message source capabilities not replied, the stack stop the message send.*/
   uint32_t PE_RespondsToDiscovSOP           : 1u; /*!< Can respond successfully to a Discover Identity */
   uint32_t PE_AttemptsDiscovSOP             : 1u; /*!< Can send a Discover Identity */
-  uint32_t CAD_TryFeature                   : 2u; /*!< Not yet implemented                                                              */
+  uint32_t CAD_DefaultPhyEnableState        : 2u; /*!< Custom implementation. If  disabled, CC lines are disabled                       */
   uint32_t CAD_AccesorySupport              : 1u; /*!< Not yet implemented                                                              */
   uint32_t CAD_RoleToggle                   : 1u; /*!< If enabled allows the detection state machine switch Rp/Rd means toggle the presented role between source and sink */
   CAD_RP_Source_Current_Adv_Typedef CAD_DefaultResistor  : 2u; /*!< Default RP resistor based on @ref CAD_RP_Source_Current_Adv_Typedef */
@@ -3560,7 +3560,7 @@ typedef struct
 #if defined(USBPDCORE_PECABLE)
   uint32_t                            IsCableConnected: 1u;  /*!< Is Cable connected                                       */
 #else
-  uint32_t                            Reserved4:        1u;  /*!< Reserved bits                                            */
+  uint32_t                            IsPhyEnabled:     1u;  /*!< Reserved bits                                            */
 #endif /* USBPDCORE_PECABLE */
 
 #if defined(USBPDCORE_EPR)
