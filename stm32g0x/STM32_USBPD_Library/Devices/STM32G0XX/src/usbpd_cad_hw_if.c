@@ -1201,6 +1201,11 @@ void CAD_Check_HW_SNK(uint8_t PortNum)
   uint32_t CC1_value;
   uint32_t CC2_value;
 
+  if (!Ports[PortNum].params->IsPhyEnabled) {
+    _handle->cc = CCNONE;
+    _handle->CurrentHWcondition = HW_Attachment;
+    return;
+  }
   /*
   ----------------------------------------------------------------------------
   | ANAMODE   |  ANASUBMODE[1:0]  |  Notes      |  TYPEC_VSTATE_CCx[1:0]      |
@@ -1270,6 +1275,12 @@ void CAD_Check_HW_SRC(uint8_t PortNum)
   /* Done to prevent code optimization issue with GCC */
   uint32_t CC1_value;
   uint32_t CC2_value;
+
+  if (!Ports[PortNum].params->IsPhyEnabled) {
+    _handle->cc = CCNONE;
+    _handle->CurrentHWcondition = HW_Attachment;
+    return;
+  }
 
   /*
   ----------------------------------------------------------------------------
