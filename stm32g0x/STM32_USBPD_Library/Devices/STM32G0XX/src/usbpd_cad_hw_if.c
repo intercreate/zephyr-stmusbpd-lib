@@ -1203,7 +1203,7 @@ void CAD_Check_HW_SNK(uint8_t PortNum)
 
   if (!Ports[PortNum].params->IsPhyEnabled) {
     _handle->cc = CCNONE;
-    _handle->CurrentHWcondition = HW_Attachment;
+    _handle->CurrentHWcondition = HW_Detachment;
     return;
   }
   /*
@@ -1278,7 +1278,7 @@ void CAD_Check_HW_SRC(uint8_t PortNum)
 
   if (!Ports[PortNum].params->IsPhyEnabled) {
     _handle->cc = CCNONE;
-    _handle->CurrentHWcondition = HW_Attachment;
+    _handle->CurrentHWcondition = HW_Detachment;
     return;
   }
 

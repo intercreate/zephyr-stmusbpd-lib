@@ -3566,7 +3566,7 @@ typedef struct
 #if defined(USBPDCORE_PECABLE)
   uint32_t                            IsCableConnected: 1u;  /*!< Is Cable connected                                       */
 #else
-  uint32_t                            IsPhyEnabled:     1u;  /*!< Reserved bits                                            */
+  uint32_t                            IsPhyEnabled:     1u;  /*!< If set, CC lines are enabled, else disabled              */
 #endif /* USBPDCORE_PECABLE */
 
 #if defined(USBPDCORE_EPR)
