@@ -172,15 +172,15 @@ void USBPDM1_AssertRp(uint8_t PortNum)
   LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_NONE);
   LL_UCPD_SetSRCRole(Ports[PortNum].husbpd);
   if(Ports[PortNum].params->IsPhyEnabled) {
-  if (CCNONE == Ports[PortNum].CCx)
-  {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
-  }
-  else
-  {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
+    if (CCNONE == Ports[PortNum].CCx)
+    {
+      LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
+    }
+    else
+    {
+      LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
                         (Ports[PortNum].CCx == CC1) ? LL_UCPD_CCENABLE_CC1 : LL_UCPD_CCENABLE_CC2);
-  }
+    }
   }
   SET_BIT(SYSCFG->CFGR1, (Ports[PortNum].husbpd == UCPD1) ? SYSCFG_CFGR1_UCPD1_STROBE : SYSCFG_CFGR1_UCPD2_STROBE);
 
@@ -213,15 +213,15 @@ void USBPDM1_AssertRd(uint8_t PortNum)
   LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_NONE);
   LL_UCPD_SetSNKRole(Ports[PortNum].husbpd);
   if(Ports[PortNum].params->IsPhyEnabled) {
-  if (CCNONE == Ports[PortNum].CCx)
-  {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
-  }
-  else
-  {
-    LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
+    if (CCNONE == Ports[PortNum].CCx)
+    {
+      LL_UCPD_SetccEnable(Ports[PortNum].husbpd, LL_UCPD_CCENABLE_CC1CC2);
+    }
+    else
+    {
+      LL_UCPD_SetccEnable(Ports[PortNum].husbpd,
                         (Ports[PortNum].CCx == CC1) ? LL_UCPD_CCENABLE_CC1 : LL_UCPD_CCENABLE_CC2);
-  }
+    }
   }
 
   SET_BIT(SYSCFG->CFGR1, (Ports[PortNum].husbpd == UCPD1) ? SYSCFG_CFGR1_UCPD1_STROBE : SYSCFG_CFGR1_UCPD2_STROBE);

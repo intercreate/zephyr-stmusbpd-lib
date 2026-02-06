@@ -1490,31 +1490,31 @@ static uint32_t ManageStateDetached_DRP(uint8_t PortNum)
   {
     if (Ports[PortNum].settings->CAD_SRCToggleTime != 0 && Ports[PortNum].settings->CAD_SNKToggleTime != 0)
     {
-    switch (Ports[PortNum].params->PE_PowerRole)
-    {
-      case USBPD_PORTPOWERROLE_SRC :
-        if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SRCToggleTime)
-        {
-          _handle->CAD_tToggle_start = HAL_GetTick();
-          Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
-          Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
-          _timing = Ports[PortNum].settings->CAD_SNKToggleTime;
-          USBPDM1_AssertRd(PortNum);
-        }
-        break;
-      case USBPD_PORTPOWERROLE_SNK :
-        if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SNKToggleTime)
-        {
-          _handle->CAD_tToggle_start = HAL_GetTick();
-          Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
-          Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
-          _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
-          USBPDM1_AssertRp(PortNum);
-        }
-        break;
-      default:
-        break;
-    }
+      switch (Ports[PortNum].params->PE_PowerRole)
+      {
+        case USBPD_PORTPOWERROLE_SRC :
+          if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SRCToggleTime)
+          {
+            _handle->CAD_tToggle_start = HAL_GetTick();
+            Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SNK;
+            Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_UFP;
+            _timing = Ports[PortNum].settings->CAD_SNKToggleTime;
+            USBPDM1_AssertRd(PortNum);
+          }
+          break;
+        case USBPD_PORTPOWERROLE_SNK :
+          if ((HAL_GetTick() - _handle->CAD_tToggle_start) > Ports[PortNum].settings->CAD_SNKToggleTime)
+          {
+            _handle->CAD_tToggle_start = HAL_GetTick();
+            Ports[PortNum].params->PE_PowerRole = USBPD_PORTPOWERROLE_SRC;
+            Ports[PortNum].params->PE_DataRole = USBPD_PORTDATAROLE_DFP;
+            _timing = Ports[PortNum].settings->CAD_SRCToggleTime;
+            USBPDM1_AssertRp(PortNum);
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 
