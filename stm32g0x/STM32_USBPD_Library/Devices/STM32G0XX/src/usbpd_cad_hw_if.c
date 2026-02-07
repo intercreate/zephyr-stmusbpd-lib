@@ -854,7 +854,9 @@ uint32_t CAD_StateMachine_DRP(uint8_t PortNum, USBPD_CAD_EVENT *pEvent, CCxPin_T
       /* DeInitialise VBUS power */
       (void)BSP_USBPD_PWR_VBUSDeInit(PortNum);
       _timing = 0;
-      _handle->cstate = USBPD_CAD_STATE_SWITCH_TO_SNK;
+      _handle->cstate = Ports[PortNum].settings->PE_DefaultRole == USBPD_PORTPOWERROLE_SNK ?
+          USBPD_CAD_STATE_SWITCH_TO_SNK : Ports[PortNum].settings->PE_DefaultRole == USBPD_PORTPOWERROLE_SRC ?
+          USBPD_CAD_STATE_SWITCH_TO_SRC : USBPD_CAD_STATE_RESET;
       break;
     }
 
@@ -1760,6 +1762,9 @@ static uint32_t ManageStateAttached_SRC(uint8_t PortNum, USBPD_CAD_EVENT *pEvent
         if (Ports[PortNum].settings->CAD_SRCToggleTime && USBPD_TRUE == Ports[PortNum].settings->CAD_RoleToggle)
         {
           USBPDM1_AssertRd(PortNum);
+        }
+        else {
+          USBPDM1_AssertRp(PortNum);
         }
 #endif /* _DRP */
         _handle->CAD_tDebounce_flag = USBPD_FALSE;
