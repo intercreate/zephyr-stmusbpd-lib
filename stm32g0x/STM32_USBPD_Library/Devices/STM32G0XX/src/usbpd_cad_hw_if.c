@@ -1742,7 +1742,7 @@ static uint32_t ManageStateAttached_SRC(uint8_t PortNum, USBPD_CAD_EVENT *pEvent
   uint32_t comp = (Ports[PortNum].CCx == CC1) ? LL_UCPD_SRC_CC1_VRD : LL_UCPD_SRC_CC2_VRD;
 
   /* Check if CC lines is opened or switch to debug accessory */
-  if (comp != ccx)
+  if (comp != ccx || !Ports[PortNum].params->IsPhyEnabled)
   {
     /* Start counting of CAD_tDebounce */
     if (USBPD_FALSE == _handle->CAD_tDebounce_flag)
