@@ -1872,10 +1872,11 @@ static uint32_t ManageStateAttached_SNK(uint8_t PortNum, USBPD_CAD_EVENT *pEvent
 
   ccx  = (Ports[PortNum].CCx == CC1) ? (Ports[PortNum].husbpd->SR & UCPD_SR_TYPEC_VSTATE_CC1)
          : (Ports[PortNum].husbpd->SR & UCPD_SR_TYPEC_VSTATE_CC2);
-  if ((USBPD_TRUE == USBPD_PWR_IF_GetVBUSStatus(PortNum,
+  if (((USBPD_TRUE == USBPD_PWR_IF_GetVBUSStatus(PortNum,
                                                 USBPD_PWR_SNKDETACH)) /* Check if Vbus is below disconnect threshold */
       &&
-      (comp == ccx)                                                   /* Confirm that there is no RP */
+      (comp == ccx))                                                   /* Confirm that there is no RP */
+          || !Ports[PortNum].params->IsPhyEnabled
      )
   {
     HW_SignalDetachment(PortNum);
