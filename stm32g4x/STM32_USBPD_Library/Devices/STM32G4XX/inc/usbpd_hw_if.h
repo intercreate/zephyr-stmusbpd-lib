@@ -25,7 +25,6 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "usbpd_def.h"
 #include "usbpd_devices_conf.h"
 
 /** @addtogroup STM32_USBPD_LIBRARY
